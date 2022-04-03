@@ -1,0 +1,39 @@
+.view-login {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    .login {
+       padding: 50px;
+       box-shadow: 0 0 30px black;
+       border-radius: 10px;
+        .logo {
+            display: flex;
+            justify-content: center;
+            img {
+                width: 150px;
+            }
+        }
+        form{
+            .botao{
+                display: flex;
+                justify-content: center;
+                margin-top: 30px;
+            }
+            .inputs{
+                margin: 10px 0;
+            }
+            .error_login{
+                font-size: 15px;
+                color: red;
+                text-align: center;
+                display: none;
+                &.ativo{
+                    display: unset;
+                }
+            }
+        }
+    }
+}
