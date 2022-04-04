@@ -23,7 +23,9 @@ const Login = () => {
 
     Api.post("usuarios/login", data).then(
       (res) => {
-        console.log(res);
+        localStorage.setItem("nome", res.data[0].nome);
+        localStorage.setItem("id", res.data[0].id);
+        localStorage.setItem("email", res.data[0].email);
         history.push("/home");
       },
       (err) => {

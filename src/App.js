@@ -14,7 +14,6 @@ class App extends Component {
     return (
       <>
         <Router>
-          <Header />
           <Switch>
             <Route exact path='/' component={Login}>
             </Route>
@@ -23,7 +22,7 @@ class App extends Component {
             <Route path='*' component={NotFound}>
             </Route>
           </Switch>
-          <Footer />
+
 
         </Router>
       </>

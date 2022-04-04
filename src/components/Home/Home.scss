@@ -1,9 +1,18 @@
 .view-home {
-    padding: 0 20%;
+    font-family: "Gotham-Light";
     .inputs{
         margin: 20px 0;
     }
     button{
         margin: 30px 0;
+    }
+    .grid-direita{
+        padding-top: 0;
+        .direita{
+            .titulo{
+                font-weight: bold;
+                text-align: center;
+            }
+        }
     }
 }

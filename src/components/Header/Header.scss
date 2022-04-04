@@ -1,5 +1,23 @@
 header {
-    background-color: aquamarine;
+    background-color: #3a0ca3;
     text-align: center;
     font-size: 30px;
+    padding: 8px 5%;
+    color: white;
+    font-family: "Gotham-Light";
+    font-size: 15px;
+    box-shadow: 0 4px 2px -2px gray;
+    border-bottom-right-radius: 7px;
+    .topo{
+        display: flex;
+        justify-content: space-between;
+        .nome{
+            display: flex;
+            align-items: center;
+            .logout{
+                margin-left: 15px;
+                cursor: pointer;
+            }
+        }
+    }
 }
