@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.0.3",
+    "@react-br-forms/cpf-cnpj-mask": "^1.0.6",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
@@ -15,9 +16,11 @@
     "cross-env": "^7.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-input-mask": "^2.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
     "sass": "^1.32.13",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -16,7 +16,7 @@ const Header = () => {
             <LogoutIcon
               className="logout"
               onClick={() => {
-                history.goBack();
+                history.push("/");
               }}
             />
           </div>

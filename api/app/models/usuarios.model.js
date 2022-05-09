@@ -1,22 +1,26 @@
 const sql = require("./db.js");
 
 // constructor
-const Usuarios = function (tutorial) {
-  this.title = tutorial.title;
-  this.description = tutorial.description;
-  this.published = tutorial.published;
+const Usuarios = function (usuario) {
+  this.id_empresa = usuario.id_empresa;
+  this.nome = usuario.nome;
+  this.email = usuario.email;
+  this.senha = usuario.senha;
+  this.cpf = usuario.cpf;
 };
 
-Usuarios.create = (newUsuario, result) => {
-  sql.query("INSERT INTO empresas_usuarios SET ?", newUsuario, (err, res) => {
+Usuarios.create = (novoUsuario, result) => {
+
+  sql.query("INSERT INTO empresas_usuarios SET ?", novoUsuario, (err, res) => {
+
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created tutorial: ", { id: res.insertId, ...newUsuario });
-    result(null, { id: res.insertId, ...newUsuario });
+    console.log("created usuario: ", { id: res.insertId, ...novoUsuario });
+    result(null, { id: res.insertId, ...novoUsuario });
   });
 };
 
@@ -33,8 +37,8 @@ Usuarios.login = (newUsuario, result) => {
   });
 };
 
-Usuarios.findById = (id, result) => {
-  sql.query(`SELECT * FROM empresas_usuarios WHERE id = ${id}`, (err, res) => {
+Usuarios.findByIdEmpresa = (id, result) => {
+  sql.query(`SELECT * FROM empresas_usuarios WHERE id_empresa = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -42,19 +46,17 @@ Usuarios.findById = (id, result) => {
     }
 
     if (res.length) {
-      console.log("found tutorial: ", res[0]);
-      result(null, res[0]);
+      console.log("Usuarios encontrados: ", res[0]);
+      result(null, res);
       return;
     }
 
     // not found Usuarios with the id
-    result({ kind: "not_found" }, null);
+    result({ kind: "nenhum_usuario_encontrado" }, null);
   });
 };
 
 Usuarios.getEmailSenha = (login, result) => {
-
-  console.log('LOGIN', login)
 
   let query = "SELECT * FROM empresas_usuarios";
 
@@ -70,7 +72,7 @@ Usuarios.getEmailSenha = (login, result) => {
       result(null, err);
       return;
     }
-    
+
 
     console.log("empresas_usuarios: ", res);
     result(null, res);
@@ -113,7 +115,7 @@ Usuarios.updateById = (id, tutorial, result) => {
   );
 };
 
-Usuarios.remove = (id, result) => {
+Usuarios.delete = (id, result) => {
   sql.query("DELETE FROM empresas_usuarios WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -123,26 +125,14 @@ Usuarios.remove = (id, result) => {
 
     if (res.affectedRows == 0) {
       // not found Usuarios with the id
-      result({ kind: "not_found" }, null);
+      result({ kind: "usuario não encontrado" }, null);
       return;
     }
 
-    console.log("deleted tutorial with id: ", id);
+    console.log("Usuario deletado com o id id: ", id);
     result(null, res);
   });
 };
 
-Usuarios.removeAll = result => {
-  sql.query("DELETE FROM empresas_usuarios", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log(`deleted ${res.affectedRows} empresas_usuarios`);
-    result(null, res);
-  });
-};
 
 module.exports = Usuarios;

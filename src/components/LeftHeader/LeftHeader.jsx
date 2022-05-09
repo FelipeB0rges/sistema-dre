@@ -5,6 +5,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom'
 
 const LeftHeader = () => {
   let history = useHistory();
@@ -13,7 +15,7 @@ const LeftHeader = () => {
       <div className="view-left-header">
         <div className="item-header">
           <div className="item selecionado">
-            Home <HomeIcon className="icone" />
+           <Link to="/home"> Home <HomeIcon className="icone" /></Link>
           </div>
         </div>
         <div className="item-header">
@@ -24,6 +26,11 @@ const LeftHeader = () => {
         <div className="item-header">
           <div className="item">
             Despesas <AttachMoneyIcon className="icone" />
+          </div>
+        </div>
+        <div className="item-header">
+          <div className="item">
+           <Link to="cadastrar-usuario"> Cadastrar Usuários <AccountCircleIcon className="icone" /></Link>
           </div>
         </div>
         <div className="item-header">

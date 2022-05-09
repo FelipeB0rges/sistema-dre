@@ -5,6 +5,7 @@ import Logo from "../../assets/images/logo192.png";
 import Button from "@mui/material/Button";
 import Api from "../../Api";
 import { useHistory } from "react-router-dom";
+import swal from 'sweetalert';
 
 const Login = () => {
   let history = useHistory();
@@ -23,13 +24,17 @@ const Login = () => {
 
     Api.post("usuarios/login", data).then(
       (res) => {
+        console.log(res)
         localStorage.setItem("nome", res.data[0].nome);
-        localStorage.setItem("id", res.data[0].id);
+        localStorage.setItem("id_usuario", res.data[0].id);
         localStorage.setItem("email", res.data[0].email);
+        localStorage.setItem("id_empresa", res.data[0].id_empresa);
         history.push("/home");
       },
       (err) => {
-        setErroLogin(true);
+        setEmail("")
+        setSenha("")
+        swal("Erro", "Usuário ou senha incorretos", "error");
       }
     );
   };
