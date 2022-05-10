@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import "./CadastrarUsuario.scss";
+import "./DespesaCadastrar.scss";
 import LeftHeader from "../LeftHeader/LeftHeader";
 import Header from "../Header/Header";
 import Grid from "@mui/material/Grid";
@@ -8,6 +8,10 @@ import Api from "../../Api";
 import TextField from "@mui/material/TextField";
 import swal from "sweetalert";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,67 +20,32 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const CadastrarUsuario = () => {
-  const [id_usuario, setIdUsuario] = useState();
+const DespesaCadastrar = () => {
   const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [cpf, setCpf] = useState("");
   const [editando, setEditando] = useState(false);
+  const [idDespesa, setIdDespesa] = useState();
+  const [Despesas, setDespesas] = useState([]);
+  const [TiposDespesas, setTiposDespesas] = useState([]);
+  const [valor, setValor] = useState("");
+  const [idTipoDespesa, setIdTipoDespesa] = useState();
   const [id_empresa, setIdEmpresa] = useState(
     localStorage.getItem("id_empresa")
   );
-  const [usuarios_empresa, setUsuariosEmpresa] = useState([]);
-
-  const handleCpfCnpjChange = (event) => {
-    // Get only the numbers from the data input
-    let data = event.target.value.replace(/\D/g, "");
-    // Checking data length to define if it is cpf or cnpj
-    if (data.length > 11) {
-      // It's cnpj
-      let cnpj = `${data.substr(0, 2)}.${data.substr(2, 3)}.${data.substr(
-        5,
-        3
-      )}/`;
-      if (data.length > 12)
-        cnpj += `${data.substr(8, 4)}-${data.substr(12, 2)}`;
-      else cnpj += data.substr(8);
-      // Pass formatting for the data
-      data = cnpj;
-    } else {
-      // It's cpf
-      let cpf = "";
-      let parts = Math.ceil(data.length / 3);
-      for (let i = 0; i < parts; i++) {
-        if (i === 3) {
-          cpf += `-${data.substr(i * 3)}`;
-          break;
-        }
-        cpf += `${i !== 0 ? "." : ""}${data.substr(i * 3, 3)}`;
-      }
-      // Pass formatting for the data
-      data = cpf;
-    }
-    // Update state
-    setCpf(data);
-  };
-
-  const handleEditar = (id, nome, usuario, cpf) => {};
 
   const handleExcluir = (id, nome) => {
     swal({
       title: "Você tem certeza?",
-      text: `Deseja excluir o usuário ${nome}?`,
+      text: `Deseja excluir a despesa? ${nome}?`,
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        Api.delete(`usuarios/${id}`).then((res) => {
-          swal("Sucesso", "Usuário excluido com sucesso", "success");
+        Api.delete(`despesas/${id}`).then((res) => {
+          swal("Sucesso", "Receita excluida com sucesso", "success");
         });
       } else {
-        swal("Cancelado", "Usuário não excluido", "error");
+        swal("Cancelado", "Receita não excluida", "error");
       }
     });
   };
@@ -85,16 +54,17 @@ const CadastrarUsuario = () => {
     event.preventDefault();
 
     const data = {
-      nome: nome,
-      email: email,
-      senha: senha,
-      cpf: cpf,
       id_empresa: id_empresa,
+      id_tipo: idTipoDespesa,
+      nome: nome,
+      valor: valor,
     };
 
-    Api.post("usuarios/cadastrar", data).then(
+    console.log(data)
+
+    Api.post("despesas/cadastrar", data).then(
       (res) => {
-        swal("Usuário cadastrado com sucesso!");
+        swal("Receita cadastrada com sucesso!");
       },
       (err) => {
         console.log(err);
@@ -103,14 +73,17 @@ const CadastrarUsuario = () => {
   };
 
   useEffect(() => {
-    Api.get(`usuarios/empresa/${id_empresa}`).then((res) => {
-      setUsuariosEmpresa(res.data);
+    Api.get(`despesas/empresa/${id_empresa}`).then((res) => {
+      setDespesas(res.data);
+    });
+    Api.get(`tipos_despesas/empresa/${id_empresa}`).then((res) => {
+      setTiposDespesas(res.data);
     });
   }, [Api]);
 
   return (
     <>
-      <div className="view-cadastrar-usuario">
+      <div className="view-tipos-despesas">
         <Header />
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           <Grid item xs={3}>
@@ -123,35 +96,34 @@ const CadastrarUsuario = () => {
             className="grid-direita"
             style={{ paddingTop: "60px" }}
           >
-            <div className="titulo">Controle de usuários</div>
+            <div className="titulo">Controle de despesas</div>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Nome</TableCell>
-                    <TableCell align="left">Email</TableCell>
-                    <TableCell align="left">Cpf</TableCell>
-                    <TableCell align="center">Ações</TableCell>
+                    <TableCell align="left">Tipo de despesa</TableCell>
+                    <TableCell align="left">Valor</TableCell>
+                    <TableCell align="left">Data</TableCell>
+                    <TableCell align="right">Ações</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {usuarios_empresa.map((usuario, index) => (
+                  {Despesas.map((despesa, index) => (
                     <TableRow key={index}>
-                      <TableCell align="left">{usuario.nome}</TableCell>
-                      <TableCell align="left">{usuario.email}</TableCell>
-                      <TableCell align="left">{usuario.cpf}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="left">{despesa.nome}</TableCell>
+                      <TableCell align="left">{despesa.descricao}</TableCell>
+                      <TableCell align="left">{despesa.valor}</TableCell>
+                      <TableCell align="left">{despesa.data}</TableCell>
+                      <TableCell align="right">
                         <Button
                           variant="contained"
                           type="button"
                           size="small"
                           style={{ margin: "10px" }}
                           onClick={() => {
-                            setIdUsuario(usuario.id);
-                            setIdEmpresa(usuario.id_empresa);
-                            setNome(usuario.nome);
-                            setEmail(usuario.email);
-                            setCpf(usuario.cpf);
+                            setIdEmpresa(despesa.id_empresa);
+                            setNome(despesa.nome);
                             setEditando(true);
                           }}
                         >
@@ -163,7 +135,7 @@ const CadastrarUsuario = () => {
                           color="error"
                           size="small"
                           onClick={() => {
-                            handleExcluir(usuario.id, usuario.nome);
+                            handleExcluir(despesa.id, despesa.nome);
                           }}
                         >
                           Excluir
@@ -183,11 +155,8 @@ const CadastrarUsuario = () => {
                 type="button"
                 onClick={() => {
                   setEditando(false);
-                  setIdUsuario(null);
+                  setIdDespesa(null);
                   setNome("");
-                  setEmail("");
-                  setSenha("");
-                  setCpf("");
                 }}
                 className="btn-cadastrar"
                 style={{ margin: "10px" }}
@@ -199,6 +168,27 @@ const CadastrarUsuario = () => {
             )}
 
             <form onSubmit={handleCadastrar}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Tipo de despesa
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={idTipoDespesa}
+                  label="Tipo de despesa"
+                  onChange={(event) => {
+                    setIdTipoDespesa(event.target.value);
+                  }}
+                >
+                  {TiposDespesas.map((tipo, index) => (
+                    <MenuItem key={index} value={tipo.id}>
+                      {tipo.descricao}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
               <TextField
                 className="inputs"
                 id="nome"
@@ -214,50 +204,20 @@ const CadastrarUsuario = () => {
               />
               <TextField
                 className="inputs"
-                id="nome"
-                type="email"
-                name="email"
-                value={email}
-                label="Email"
+                id="valor"
+                type="number"
+                name="valor"
+                value={valor}
+                label="Valor"
                 variant="standard"
                 fullWidth={true}
                 onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <TextField
-                className="inputs"
-                id="nome"
-                name="cpf"
-                type="text"
-                value={cpf}
-                label="CPF/CNPJ"
-                variant="standard"
-                fullWidth={true}
-                onChange={(e) => {
-                  handleCpfCnpjChange(e);
-                }}
-              />
-              <TextField
-                className="inputs"
-                id="nome"
-                name="senha"
-                type="password"
-                value={senha}
-                label="Senha"
-                variant="standard"
-                fullWidth={true}
-                onChange={(e) => {
-                  setSenha(e.target.value);
+                  setValor(e.target.value);
                 }}
               />
 
               <div className="botao">
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={!senha || !email}
-                >
+                <Button variant="contained" type="submit" disabled={!nome}>
                   Cadastrar
                 </Button>
               </div>
@@ -269,4 +229,4 @@ const CadastrarUsuario = () => {
   );
 };
 
-export default CadastrarUsuario;
+export default DespesaCadastrar;

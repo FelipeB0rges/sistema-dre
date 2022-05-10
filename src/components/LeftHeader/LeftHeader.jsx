@@ -59,10 +59,10 @@ const LeftHeader = () => {
             Despesas <AttachMoneyIcon className="icone" />
             <div className={open == "despesas" ? "sub-menu ativo" : "sub-menu"}>
             <div className="sub-item">
-                <Link to="/despesas"> Tipos despesas</Link>
+                <Link to="/tipos-despesas"> Tipos despesas</Link>
               </div>
               <div className="sub-item">
-                <Link to="/receita-cadastrar"> Cadastrar</Link>
+                <Link to="/despesas-cadastrar"> Cadastrar</Link>
               </div>
           
             </div>

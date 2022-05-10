@@ -1,0 +1,30 @@
+.view-tipos-despesas {
+    .titulo {
+        font-size: 20px;
+        text-align: center;
+        margin: 20px 0;
+        font-weight: bold;
+    }
+    form {
+        box-shadow: 0 0 4px #c7c7c7;
+        padding: 10px;
+        border-radius: 5px;
+        .botao {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .inputs {
+            margin: 10px 0;
+        }
+        .error_login {
+            font-size: 15px;
+            color: red;
+            text-align: center;
+            display: none;
+            &.ativo {
+                display: unset;
+            }
+        }
+    }
+}

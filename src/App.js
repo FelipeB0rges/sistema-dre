@@ -7,6 +7,8 @@ import NotFound from './components/NotFound/NotFound';
 import CadastrarUsuario from './components/CadastrarUsuario/CadastrarUsuario';
 import TiposReceitas from './components/TiposReceitas/TiposReceitas';
 import ReceitaCadastrar from './components/ReceitaCadastrar/ReceitaCadastrar';
+import TiposDespesas from './components/TiposDespesas/TiposDespesas';
+import DespesaCadastrar from './components/DespesaCadastrar/DespesaCadastrar';
 
 class App extends Component {
 
@@ -22,7 +24,11 @@ class App extends Component {
             </Route>
             <Route exact path='/tipos-receitas' component={TiposReceitas}>
             </Route>
+            <Route exact path='/tipos-despesas' component={TiposDespesas}>
+            </Route>
             <Route exact path='/receitas-cadastrar' component={ReceitaCadastrar}>
+            </Route>
+            <Route exact path='/despesas-cadastrar' component={DespesaCadastrar}>
             </Route>
             <Route exact path='/home' component={Home}>
             </Route>
