@@ -33,7 +33,12 @@ Relatorio.gerar = (relatorio, result) => {
 
   sql.query(primeira_consulta, (err, res) => {
     query = res[0].query
-    query += ` WHERE id_empresa = '${relatorio.id_empresa}'`;
+    console.log('IDDDD', relatorio.id_relatorio)
+    if (relatorio.id_relatorio == "3" || relatorio.id_relatorio == "4") {
+      query += ` WHERE re.id_empresa = '${relatorio.id_empresa}'`;
+    } else {
+      query += ` WHERE id_empresa = '${relatorio.id_empresa}'`;
+    }
     if (relatorio.data_inicio) {
       query += ` AND data >= '${moment(relatorio.data_inicio).format("YYYY-MM-DD HH:mm:ss")}'`;
     }
@@ -47,9 +52,9 @@ Relatorio.gerar = (relatorio, result) => {
         result(null, err);
         return;
       }
-      if(res.length){
+      if (res.length) {
         res.forEach(element => {
-          if(element.data){
+          if (element.data) {
             element.data = moment(element.data).format("DD/MM/YYYY HH:mm:ss")
           }
         });

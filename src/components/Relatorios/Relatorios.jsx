@@ -26,11 +26,11 @@ import Paper from "@mui/material/Paper";
 const Relatorios = () => {
   const [Relatorios, setRelatorios] = useState([]);
   const [idRelatorio, setIdRelatorio] = useState();
-  const[dataInicio, setDataInicio] = useState();
-  const[dataFim, setDataFim] = useState();
-  const[RelatoriosCampos, setRelatoriosCampos] = useState([]);
-  const[RelatorioResultados, setRelatorioResultados] = useState([]);
-  const[RelatorioDescricao, setRelatorioDescricao] = useState([]);
+  const [dataInicio, setDataInicio] = useState();
+  const [dataFim, setDataFim] = useState();
+  const [RelatoriosCampos, setRelatoriosCampos] = useState([]);
+  const [RelatorioResultados, setRelatorioResultados] = useState([]);
+  const [RelatorioDescricao, setRelatorioDescricao] = useState([]);
   const [id_empresa, setIdEmpresa] = useState(
     localStorage.getItem("id_empresa")
   );
@@ -41,27 +41,27 @@ const Relatorios = () => {
     const data = {
       id_relatorio: `${idRelatorio}`,
       id_empresa: id_empresa,
-      data_inicio: dataInicio,
-      data_fim: dataFim,
+      data_inicio: idRelatorio == 1 || idRelatorio == 2 ? null : dataInicio,
+      data_fim: idRelatorio == 1 || idRelatorio == 2 ? null : dataFim,
     };
 
     console.log("dataaa", data);
 
     Api.post("relatorios/gerar", data).then(
       (res) => {
-        console.log(res)
+        console.log(res);
         res = res.data;
 
-        if(res.length==0){
+        if (res.length == 0) {
           swal("Atenção", "Nenhum resultado encontrado", "warning");
         }
 
-        setRelatorioResultados(res.map(obj => Object.values(obj)))
+        setRelatorioResultados(res.map((obj) => Object.values(obj)));
         setRelatoriosCampos(Object.keys(res[0]));
-        setRelatorioDescricao(res.map(obj => obj.descricao));
-        console.log(RelatorioResultados)
-        console.log(RelatoriosCampos)
-        console.log(RelatorioDescricao)
+        setRelatorioDescricao(res.map((obj) => obj.descricao));
+        console.log(RelatorioResultados);
+        console.log(RelatoriosCampos);
+        console.log(RelatorioDescricao);
       },
       (err) => {
         console.log(err);
@@ -93,7 +93,7 @@ const Relatorios = () => {
           >
             <div className="titulo">Relatórios</div>
             <form onSubmit={handleGerar}>
-              <FormControl fullWidth>
+              <FormControl fullWidth style={{ margin: "25px 0" }}>
                 <InputLabel id="demo-simple-select-label">Relatório</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -112,13 +112,18 @@ const Relatorios = () => {
                 </Select>
               </FormControl>
 
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                
+              >
                 <DatePicker
                   label="Data inicial"
                   value={dataInicio}
                   onChange={(dataInicio) => {
                     setDataInicio(dataInicio);
                   }}
+                  style={{ margin: "15px 0" }}
+                  disabled={idRelatorio == 1 || idRelatorio == 2 || !idRelatorio}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -131,14 +136,20 @@ const Relatorios = () => {
                     setDataFim(dataFim);
                     console.log(dataFim);
                   }}
+                  style={{ margin: "15px 0" }}
+                  disabled={idRelatorio == 1 || idRelatorio == 2 || !idRelatorio}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
 
               <div className="botao">
-                <Button variant="contained" type="submit" disabled={!idRelatorio}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={!idRelatorio}
+                >
                   Buscar
-                </Button >
+                </Button>
               </div>
             </form>
             <TableContainer component={Paper}>
