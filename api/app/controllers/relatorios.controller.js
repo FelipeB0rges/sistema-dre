@@ -13,8 +13,8 @@ exports.create = (req, res) => {
     const relatorio = new Relatorio({
         id_empresa: req.body.id_empresa,
         id_tipo: req.body.id_tipo,
-        nome: req.body.nome,
-        valor: req.body.valor,
+        data_inicio: req.body.data_inicio,
+        data_fim: req.body.data_fim
     });
 
     // Save Relatorio in the database
@@ -41,6 +41,8 @@ exports.gerar = (req, res) => {
     const relatorio = new Relatorio({
         id_empresa: req.body.id_empresa,
         id_relatorio: req.body.id_relatorio,
+        data_inicio: req.body.data_inicio,
+        data_fim: req.body.data_fim
     });
 
     // Save Relatorio in the database

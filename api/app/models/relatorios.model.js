@@ -1,9 +1,12 @@
 const sql = require("./db.js");
+const moment = require("moment");
 
 // constructor
 const Relatorio = function (relatorio) {
   this.id_empresa = relatorio.id_empresa;
   this.id_relatorio = relatorio.id_relatorio;
+  this.data_inicio = relatorio.data_inicio;
+  this.data_fim = relatorio.data_fim;
 };
 
 Relatorio.create = (novo_relatorio, result) => {
@@ -31,12 +34,25 @@ Relatorio.gerar = (relatorio, result) => {
   sql.query(primeira_consulta, (err, res) => {
     query = res[0].query
     query += ` WHERE id_empresa = '${relatorio.id_empresa}'`;
+    if (relatorio.data_inicio) {
+      query += ` AND data >= '${moment(relatorio.data_inicio).format("YYYY-MM-DD HH:mm:ss")}'`;
+    }
+    if (relatorio.data_fim) {
+      query += ` AND data <= '${moment(relatorio.data_fim).format("YYYY-MM-DD HH:mm:ss")}'`;
+    }
     console.log('query', query)
     sql.query(query, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
         return;
+      }
+      if(res.length){
+        res.forEach(element => {
+          if(element.data){
+            element.data = moment(element.data).format("DD/MM/YYYY HH:mm:ss")
+          }
+        });
       }
       console.log("relatorios: ", res);
       result(null, res);
