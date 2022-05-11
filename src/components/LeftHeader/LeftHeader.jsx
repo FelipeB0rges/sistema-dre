@@ -78,7 +78,9 @@ const LeftHeader = () => {
         </div>
         <div className="item-header">
           <div className="item">
+          <Link to="relatorios">
             Relatórios <AssessmentIcon className="icone" />
+            </Link>
           </div>
         </div>
       </div>

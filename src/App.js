@@ -9,6 +9,7 @@ import TiposReceitas from './components/TiposReceitas/TiposReceitas';
 import ReceitaCadastrar from './components/ReceitaCadastrar/ReceitaCadastrar';
 import TiposDespesas from './components/TiposDespesas/TiposDespesas';
 import DespesaCadastrar from './components/DespesaCadastrar/DespesaCadastrar';
+import Relatorios from './components/Relatorios/Relatorios';
 
 class App extends Component {
 
@@ -29,6 +30,8 @@ class App extends Component {
             <Route exact path='/receitas-cadastrar' component={ReceitaCadastrar}>
             </Route>
             <Route exact path='/despesas-cadastrar' component={DespesaCadastrar}>
+            </Route>
+            <Route exact path='/relatorios' component={Relatorios}>
             </Route>
             <Route exact path='/home' component={Home}>
             </Route>
