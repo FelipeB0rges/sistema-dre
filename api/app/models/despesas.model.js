@@ -1,4 +1,5 @@
 const sql = require("./db.js");
+const moment = require("moment");
 
 // constructor
 const Despesa = function (despesa) {
@@ -44,6 +45,11 @@ Despesa.findByIdEmpresa = (id, result) => {
     }
 
     if (res.length) {
+      res.forEach(element => {
+        if (element.data) {
+          element.data = moment(element.data).format("DD/MM/YYYY HH:mm:ss")
+        }
+      });
       console.log("Despesa encontrados: ", res[0]);
       result(null, res);
       return;

@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Api from "../../Api";
 import TextField from "@mui/material/TextField";
 import swal from "sweetalert";
+import moment from "moment";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,8 +27,8 @@ import Paper from "@mui/material/Paper";
 const Relatorios = () => {
   const [Relatorios, setRelatorios] = useState([]);
   const [idRelatorio, setIdRelatorio] = useState();
-  const [dataInicio, setDataInicio] = useState();
-  const [dataFim, setDataFim] = useState();
+  const [dataInicio, setDataInicio] = useState(moment());
+  const [dataFim, setDataFim] = useState(moment());
   const [RelatoriosCampos, setRelatoriosCampos] = useState([]);
   const [RelatorioResultados, setRelatorioResultados] = useState([]);
   const [RelatorioDescricao, setRelatorioDescricao] = useState([]);
@@ -45,7 +46,6 @@ const Relatorios = () => {
       data_fim: idRelatorio == 1 || idRelatorio == 2 ? null : dataFim,
     };
 
-    console.log("dataaa", data);
 
     Api.post("relatorios/gerar", data).then(
       (res) => {
@@ -59,9 +59,7 @@ const Relatorios = () => {
         setRelatorioResultados(res.map((obj) => Object.values(obj)));
         setRelatoriosCampos(Object.keys(res[0]));
         setRelatorioDescricao(res.map((obj) => obj.descricao));
-        console.log(RelatorioResultados);
-        console.log(RelatoriosCampos);
-        console.log(RelatorioDescricao);
+      
       },
       (err) => {
         console.log(err);

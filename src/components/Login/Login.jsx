@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import TextField from "@mui/material/TextField";
 import Logo from "../../assets/images/logo192.png";
@@ -13,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro_login, setErroLogin] = useState(false);
+  const[splash,setSplash] = useState(false);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -39,8 +40,18 @@ const Login = () => {
     );
   };
 
+  setTimeout(() => {
+    setSplash(true);
+  }, 5000);
+
+
   return (
     <div className="view-login">
+      <div className={splash ? "splash inativo" : "splash"} >
+        <div className="logo">
+          <img src={Logo} alt="" />
+        </div>
+      </div>
       <div className="login">
         <div className="logo">
           <img src={Logo} alt="" />
