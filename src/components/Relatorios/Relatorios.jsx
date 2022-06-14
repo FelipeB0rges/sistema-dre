@@ -23,6 +23,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const Relatorios = () => {
   const [Relatorios, setRelatorios] = useState([]);
@@ -32,6 +35,8 @@ const Relatorios = () => {
   const [RelatoriosCampos, setRelatoriosCampos] = useState([]);
   const [RelatorioResultados, setRelatorioResultados] = useState([]);
   const [RelatorioDescricao, setRelatorioDescricao] = useState([]);
+  const [DinamicosSelecionados, setDinamicosSelecionados] = useState([]);
+  const [Dinamicos, setDinamicos] = useState([]);
   const [id_empresa, setIdEmpresa] = useState(
     localStorage.getItem("id_empresa")
   );
@@ -46,7 +51,6 @@ const Relatorios = () => {
       data_fim: idRelatorio == 1 || idRelatorio == 2 ? null : dataFim,
     };
 
-
     Api.post("relatorios/gerar", data).then(
       (res) => {
         console.log(res);
@@ -59,13 +63,23 @@ const Relatorios = () => {
         setRelatorioResultados(res.map((obj) => Object.values(obj)));
         setRelatoriosCampos(Object.keys(res[0]));
         setRelatorioDescricao(res.map((obj) => obj.descricao));
-      
       },
       (err) => {
         console.log(err);
       }
     );
   };
+
+  function RelatoriosDinamicos(id) {
+    if (id == 4) {
+      Api.post(`relatorios/despesas`, { id_empresa: id_empresa }).then(
+        (res) => {
+          setDinamicos(res.data);
+          console.log(res);
+        }
+      );
+    }
+  }
 
   useEffect(() => {
     Api.get(`relatorios`).then((res) => {
@@ -100,6 +114,7 @@ const Relatorios = () => {
                   label="Tipo de receita"
                   onChange={(event) => {
                     setIdRelatorio(event.target.value);
+                    RelatoriosDinamicos(event.target.value);
                   }}
                 >
                   {Relatorios.map((relatorio, index) => (
@@ -110,10 +125,7 @@ const Relatorios = () => {
                 </Select>
               </FormControl>
 
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                
-              >
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Data inicial"
                   value={dataInicio}
@@ -121,7 +133,9 @@ const Relatorios = () => {
                     setDataInicio(dataInicio);
                   }}
                   style={{ margin: "15px 0" }}
-                  disabled={idRelatorio == 1 || idRelatorio == 2 || !idRelatorio}
+                  disabled={
+                    idRelatorio == 1 || idRelatorio == 2 || !idRelatorio
+                  }
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -135,10 +149,40 @@ const Relatorios = () => {
                     console.log(dataFim);
                   }}
                   style={{ margin: "15px 0" }}
-                  disabled={idRelatorio == 1 || idRelatorio == 2 || !idRelatorio}
+                  disabled={
+                    idRelatorio == 1 || idRelatorio == 2 || !idRelatorio
+                  }
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
+
+              {(idRelatorio == 3 || idRelatorio == 4 && Dinamicos.length>1) && (
+                <FormGroup>
+                  {Dinamicos.map((dinamico, index) => (
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      label={dinamico.descricao}
+                      key={index}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setDinamicosSelecionados([
+                            ...DinamicosSelecionados,
+                            dinamico.id,
+                          ]);
+                        } else {
+                          setDinamicosSelecionados(
+                            DinamicosSelecionados.filter(
+                              (id) => id != dinamico.id
+                            )
+                          );
+                        }
+                        console.log(DinamicosSelecionados)
+                      }
+                      }
+                    />
+                  ))}
+                </FormGroup>
+              )}
 
               <div className="botao">
                 <Button

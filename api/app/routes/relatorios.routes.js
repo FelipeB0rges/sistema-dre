@@ -8,6 +8,9 @@ module.exports = app => {
 
      // Create a new Usuario
     router.post("/gerar", relatorios.gerar);
+
+      // Create a new Usuario
+    router.post("/despesas", relatorios.despesas);
   
     // Retrieve all published Usuarios
     router.get("/", relatorios.findAll);

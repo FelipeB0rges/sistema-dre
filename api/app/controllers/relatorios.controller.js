@@ -77,6 +77,24 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Retrieve all Tutorials from the database (with condition).
+exports.despesas = (req, res) => {
+
+    const relatorio = {
+        id_empresa: req.params.id_empresa,
+    }
+
+
+    Relatorio.despesas(relatorio, (err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Erro ao buscar relatorios"
+            });
+        else res.send(data);
+    });
+};
+
 exports.delete = (req, res) => {
 
     const id_receita = req.params.id;

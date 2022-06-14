@@ -99,6 +99,25 @@ Relatorio.findAll = (relatorio, result) => {
   });
 };
 
+Relatorio.despesas = (relatorio, result) => {
+  sql.query(`SELECT * from despesa_tipo`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("Relatorio encontrados: ", res[0]);
+      result(null, res);
+      return;
+    }
+
+    // not found Relatorio with the id
+    result({ kind: "nenhum_usuario_encontrado" }, null);
+  });
+};
+
 Relatorio.getEmailSenha = (login, result) => {
 
   let query = "SELECT * FROM relatorios";
